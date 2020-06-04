@@ -33,7 +33,9 @@
   },
   "quokka": {
     "babel": {
-      "presets": ["react-app"]
+      "presets": [
+        "react-app"
+      ]
     }
   }
 }

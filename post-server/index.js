@@ -1,6 +1,7 @@
 import express from "express";
 import { randomBytes } from "crypto";
 import bodyParser from "body-parser";
+import cors from "cors";
 
 const host = "127.0.0.1";
 const port = process.env.PORT || 4000;
@@ -15,6 +16,12 @@ app.use(
 
 app.use(bodyParser.json());
 
+app.use(
+    cors({
+        origin: ["http://localhost:3000/", "http://localhost:3000"],
+    })
+);
+
 const posts = {};
 
 app.get("/", (req, res, next) => {
@@ -27,8 +34,9 @@ app.get("/posts", (req, res, next) => {
 
 app.post("/posts", (req, res, next) => {
     const id = randomBytes(4).toString("hex");
-    const { title } = req?.body;
-    console.log(req?.body);
+    console.log(req.body, "=> => ");
+    const { title } = JSON.parse(JSON.stringify(req.body));
+    console.log(req.body.title);
     posts[id] = { id, title };
 
     res.status(201).json(posts);
