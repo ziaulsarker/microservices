@@ -1,28 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useMemo } from "react";
+import { DataContext } from "./context/context";
 
 function PostsList(props) {
-    const [posts, setPosts] = useState([]);
+    const { posts } = useContext(DataContext);
+    console.log(posts);
 
-    const getPosts = async () => {
-        const res = await fetch("http://127.0.0.1:4000/posts");
-        const fetchedPosts = await res.json();
-        setPosts(fetchedPosts);
-    };
+    const memoPosts = useMemo(() => {
+        return (
+            <div className="col-sm-6 pl-0">
+                <h6 className="mt-5 ">
+                    {Object.keys(posts).length > 1 && "Posts"}
+                </h6>
+                {Object.values(posts)
+                    .map((x) => (
+                        <div key={x.id} className="card [ my-3 ]">
+                            <div className="card-body">{x.title}</div>
+                        </div>
+                    ))
+                    .reverse()}
+            </div>
+        );
+    }, [posts]);
 
-    useEffect(() => {
-        getPosts();
-    }, []);
-
-    return (
-        <div className="col-sm-6 pl-0">
-            <h6 className="mt-5">Comments</h6>
-            {Object.values(posts).map((x) => (
-                <div key={x.id} className="card [ my-3 ]">
-                    <div className="card-body">{x.title}</div>
-                </div>
-            ))}
-        </div>
-    );
+    return memoPosts;
 }
 
 export default PostsList;

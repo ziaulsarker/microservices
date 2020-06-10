@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useMemo, useContext } from "react";
 import PostCreate from "./postCreate";
 import PostList from "./postList";
 
+import Provider from "./context/context";
+
 function App(props) {
     return (
-        <div className="container">
-            <h1> Create Post</h1>
-            <PostCreate />
-            <PostList />
-        </div>
+        <Provider>
+            <div className="container">
+                <h1> Create Post</h1>
+                <PostCreate />
+                {<PostList />}
+            </div>
+        </Provider>
     );
 }
 

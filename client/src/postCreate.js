@@ -1,8 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
+import { DataContext } from "./context/context";
 
 export default function PostCreate(props) {
     const [title, setTitle] = useState("");
     const ref = useRef(null);
+    const { setPosts } = useContext(DataContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,7 +21,8 @@ export default function PostCreate(props) {
 
         const data = await response.json();
 
-        console.log("data => ", data);
+        setTitle("");
+        setPosts(data);
     };
 
     return (
@@ -31,6 +34,7 @@ export default function PostCreate(props) {
                         className="form-control"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
+                        name="post"
                     />
                 </div>
                 <button className="btn btn-primary"> Submit </button>
