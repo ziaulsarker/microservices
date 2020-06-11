@@ -1,9 +1,10 @@
 import React, { useContext, useMemo } from "react";
 import { DataContext } from "./context/context";
+import CommentCreate from "./commentCreate";
+import CommentList from "./commentList";
 
 function PostsList(props) {
     const { posts } = useContext(DataContext);
-    console.log(posts);
 
     const memoPosts = useMemo(() => {
         return (
@@ -13,8 +14,12 @@ function PostsList(props) {
                 </h6>
                 {Object.values(posts)
                     .map((x) => (
-                        <div key={x.id} className="card [ my-3 ]">
+                        <div id={x.id} key={x.id} className="card [ my-3 ]">
                             <div className="card-body">{x.title}</div>
+                            <div className="[ col-sm-8 / mt-3]">
+                                <CommentCreate postID={x.id} />
+                                <CommentList id={x.id} />
+                            </div>
                         </div>
                     ))
                     .reverse()}

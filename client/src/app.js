@@ -10,7 +10,7 @@ function App(props) {
             <div className="container">
                 <h1> Create Post</h1>
                 <PostCreate />
-                {<PostList />}
+                <PostList />
             </div>
         </Provider>
     );

@@ -1,4 +1,4 @@
-import React, { useState, createContext, useEffect } from "react";
+import React, { useState, createContext, useEffect, useMemo } from "react";
 import useFetchedPosts from "../hooks/fetchPosts";
 
 export const DataContext = createContext({});
