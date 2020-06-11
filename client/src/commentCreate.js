@@ -1,7 +1,10 @@
 import React, { useState, useRef } from "react";
+import CommentList from "./commentList";
 
 function CommentCreate({ postID, ...props }) {
     const [comment, setComment] = useState("");
+    const [postCommentList, setPostCommentList] = useState([]);
+
     const ref = useRef(null);
 
     const handleSubmit = async (e) => {
@@ -24,8 +27,11 @@ function CommentCreate({ postID, ...props }) {
         );
 
         const comments = await response.json();
-        console.log("comments => ", comments);
+
+        setPostCommentList(comments);
         setComment("");
+
+        console.log("comments => ", comments);
     };
 
     return (
@@ -43,6 +49,10 @@ function CommentCreate({ postID, ...props }) {
                     Submit{" "}
                 </button>
             </form>
+
+            <div>
+                <CommentList id={postID} list={postCommentList} />
+            </div>
         </div>
     );
 }

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-function CommentList({ id, ...props }) {
+function CommentList({ list, id, ...props }) {
     const [commets, setComments] = useState([]);
 
     const getComments = async (id) => {
-        const res = await fetch(`http://127.0.0.1:40001/posts/${id}/commets`);
+        const res = await fetch(`http://127.0.0.1:4001/posts/${id}/comments`);
+
         const data = await res.json();
 
         setComments(data);
@@ -12,14 +13,10 @@ function CommentList({ id, ...props }) {
 
     useEffect(() => {
         getComments(id);
-    }, []);
+    }, [list]);
 
     return (
-        <ul>
-            {commets.map((c) => (
-                <li key={c.id}>{c.content}</li>
-            ))}
-        </ul>
+        <ul>{list && commets.map((c) => <li key={c.id}>{c.content}</li>)}</ul>
     );
 }
 

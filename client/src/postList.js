@@ -18,7 +18,6 @@ function PostsList(props) {
                             <div className="card-body">{x.title}</div>
                             <div className="[ col-sm-8 / mt-3]">
                                 <CommentCreate postID={x.id} />
-                                <CommentList id={x.id} />
                             </div>
                         </div>
                     ))
