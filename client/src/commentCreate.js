@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import CommentList from "./commentList";
 
 function CommentCreate({ postID, ...props }) {
@@ -36,6 +36,14 @@ function CommentCreate({ postID, ...props }) {
 
     return (
         <div className="my-3">
+            <div>
+                {useMemo(
+                    () => (
+                        <CommentList id={postID} list={postCommentList} />
+                    ),
+                    [postCommentList, postID]
+                )}
+            </div>
             <form ref={ref} onSubmit={handleSubmit}>
                 <label>comment</label>
                 <input
@@ -49,10 +57,6 @@ function CommentCreate({ postID, ...props }) {
                     Submit{" "}
                 </button>
             </form>
-
-            <div>
-                <CommentList id={postID} list={postCommentList} />
-            </div>
         </div>
     );
 }
