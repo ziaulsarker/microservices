@@ -1,9 +1,10 @@
 import express from "express";
 import bodyParser from "body-parser";
+import axios from "axios";
 import cors from "cors";
 
 const app = express();
-const port = process.env.PORT || 4002;
+const port = process.env.PORT || 4005;
 const host = `127.0.0.1`;
 
 const jsonPharser = bodyParser.json();
@@ -16,6 +17,18 @@ app.use([jsonPharser, urlEncoder, corsMiddleware]);
 
 app.get("/", async (req, res, next) => {
     res.json({ server: "Event Broker" });
+});
+
+app.post("/events", async (req, res) => {
+    const event = req.body;
+
+    const response = await Promise.all([
+        axios.post("http://localhost:4000/events", event),
+        axios.post("http://localhost:4001/events", event),
+        axios.post("http://localhost:4002/events", event),
+    ]);
+
+    res.send({ status: "OK", response });
 });
 
 app.listen(port, host, async () => {
