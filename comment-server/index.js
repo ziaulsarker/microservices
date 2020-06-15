@@ -2,6 +2,7 @@ import express from "express";
 import { randomBytes } from "crypto";
 import bodyParser from "body-parser";
 import cors from "cors";
+import axios from "axios";
 
 const app = express();
 const port = process.env.PORT || 4001;
@@ -43,7 +44,26 @@ app.post("/posts/:id/comments", async (req, res) => {
 
     commentsByPostID[id] = comments;
 
+    try {
+        const eventBusResponse = await axios.post(
+            "http://127.0.0.1:4005/events",
+            {
+                type: "COMMENT_CREATED",
+                data: { id: commentId, content, postID: id },
+            }
+        );
+
+        console.log("EVENT FROM COMMENT => ", eventBusResponse);
+    } catch (e) {
+        console.log("EVENT BUS RESPONSE ERROR => ", e);
+    }
+
     res.status(201).send(comments);
+});
+
+app.post("/events", async (req, res) => {
+    console.log("new event emitted", req.body.type);
+    res.send({ event: req.body.type });
 });
 
 app.listen(port, host, async () => {

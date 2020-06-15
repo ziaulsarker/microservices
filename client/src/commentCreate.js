@@ -35,7 +35,7 @@ function CommentCreate({ postID, ...props }) {
     };
 
     return (
-        <div className="my-3">
+        <div className="my-2">
             <div>
                 {useMemo(
                     () => (
@@ -52,7 +52,7 @@ function CommentCreate({ postID, ...props }) {
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                 />
-                <button type="submit" className="btn btn-warning">
+                <button type="submit" className="btn btn-warning mt-3">
                     {" "}
                     Submit{" "}
                 </button>
