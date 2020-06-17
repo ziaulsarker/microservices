@@ -1,16 +1,22 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo, useEffect, useContext } from "react";
 import CommentList from "./commentList";
+import { DataContext } from "./context/context";
 
-function CommentCreate({ postID, ...props }) {
+function CommentCreate({ post, ...props }) {
     const [comment, setComment] = useState("");
     const [postCommentList, setPostCommentList] = useState([]);
+    const { setPosts, posts } = useContext(DataContext);
 
     const ref = useRef(null);
 
+    console.log(post);
+
+    useEffect(() => {
+        setPostCommentList(post.comments);
+    }, [post.comments]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        console.log({ content: comment });
 
         const fetchOptions = {
             method: "POST",
@@ -22,16 +28,17 @@ function CommentCreate({ postID, ...props }) {
         };
 
         const response = await fetch(
-            `http://127.0.0.1:4001/posts/${postID}/comments`,
+            `http://127.0.0.1:4001/posts/${post.id}/comments`,
             fetchOptions
         );
 
-        const comments = await response.json();
+        const comments = await fetch(
+            "http://127.0.0.1:4002/posts"
+        ).then((res) => res.json());
 
-        setPostCommentList(comments);
+        setPosts(comments);
+
         setComment("");
-
-        console.log("comments => ", comments);
     };
 
     return (
@@ -39,9 +46,9 @@ function CommentCreate({ postID, ...props }) {
             <div>
                 {useMemo(
                     () => (
-                        <CommentList id={postID} list={postCommentList} />
+                        <CommentList list={post.comments} />
                     ),
-                    [postCommentList, postID]
+                    [post.comments]
                 )}
             </div>
             <form ref={ref} onSubmit={handleSubmit}>

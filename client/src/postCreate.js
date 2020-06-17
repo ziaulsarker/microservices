@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useState, useContext, useEffect } from "react";
 import { DataContext } from "./context/context";
 
 export default function PostCreate(props) {
@@ -9,7 +9,6 @@ export default function PostCreate(props) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log(JSON.stringify({ title }));
         const response = await fetch("http://127.0.0.1:4000/posts", {
             method: "POST",
 
@@ -21,8 +20,15 @@ export default function PostCreate(props) {
 
         const data = await response.json();
 
+        const posts = await fetch("http://127.0.0.1:4002/posts").then((res) =>
+            res.json()
+        );
+
+        console.log("posts", posts);
+
+        setPosts(posts);
+
         setTitle("");
-        setPosts(data);
     };
 
     return (
