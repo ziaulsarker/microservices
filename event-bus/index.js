@@ -22,9 +22,12 @@ app.get("/", async (req, res, next) => {
 app.post("/events", async (req, res) => {
     const event = req.body;
 
+    console.log("event bus body: ", event);
+
     axios.post("http://localhost:4000/events", event);
     axios.post("http://localhost:4001/events", event);
     axios.post("http://localhost:4002/events", event);
+    axios.post("http://localhost:4004/events", event);
 
     res.send({ status: "OK" });
 });

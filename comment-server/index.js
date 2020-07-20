@@ -40,7 +40,7 @@ app.post("/posts/:id/comments", async (req, res) => {
 
     const comments = commentsByPostID[id] ?? [];
 
-    comments.push({ id: commentId, content });
+    comments.push({ id: commentId, content, status: "pending" });
 
     commentsByPostID[id] = comments;
 
@@ -49,7 +49,7 @@ app.post("/posts/:id/comments", async (req, res) => {
             "http://127.0.0.1:4005/events",
             {
                 type: "COMMENT_CREATED",
-                data: { id: commentId, content, postID: id },
+                data: { id: commentId, content, postID: id, status: "pending" },
             }
         );
 
