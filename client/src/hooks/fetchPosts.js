@@ -1,19 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from 'react';
 
-function useFetchedPosts(props) {
-    const [posts, setPosts] = useState([]);
-
+function useFetchPosts() {
+    const [posts, setPosts] = useState({});
     const getPosts = async () => {
-        const res = await fetch("http://127.0.0.1:4002/posts");
-        const fetchedPosts = await res.json();
-        setPosts(fetchedPosts);
-    };
+        const postEndpoint = 'http://127.0.0.1:3001/posts'
+        try{
+            const postsRes = await fetch(postEndpoint);
+            const fetchedPosts = await postsRes.json();
+            setPosts(fetchedPosts);
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
     useEffect(() => {
         getPosts();
-    }, []);
+    }, [])
 
-    return posts;
+    return { posts, setPosts };
 }
 
-export default useFetchedPosts;
+export default useFetchPosts
