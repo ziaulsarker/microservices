@@ -1,13 +1,18 @@
 import React, {useContext} from 'react';
-import {Post} from "../types/post-type";
+import {Post, UseFetchPostsInterfaces} from "../types/post-type";
 import {PostsContext} from "../contexts/posts-context.js"
 
-function PostList(): React.ReactElement{
-  const {posts} = useContext<Post[] | any>(PostsContext);
+interface Props {
+  children?: React.ReactChildren
+}
+
+const PostList = (props: Props): React.ReactElement => {
+  const {posts}: UseFetchPostsInterfaces = useContext(PostsContext);
+  const availablePosts: Post[] | any= Object.values({...posts});
   return (
-    <div>
-      { Object.values(posts).map<Post[]>(({id, title}) => <h2 key={id} element="div">{title}</h2>) }
-    </div>
+    <>
+    {availablePosts.map( ({id, title}: Post) => <h2 key={id}> {title} </h2> ) }
+    </>
   )
 }
 

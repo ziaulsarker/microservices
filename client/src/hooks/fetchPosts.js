@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 
 function useFetchPosts() {
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState({});
     const getPosts = async () => {
         const postEndpoint = 'http://127.0.0.1:3001/posts'
         try{
