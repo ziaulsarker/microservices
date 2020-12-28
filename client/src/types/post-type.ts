@@ -10,5 +10,5 @@ export interface Post {
 
 export interface UseFetchPostsInterfaces {
     posts?: Post;
-    setPosts?: any;
+    setPosts?: (posts: Post[]) => void;
 }
