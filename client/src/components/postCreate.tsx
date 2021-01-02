@@ -24,6 +24,8 @@ const PostCreate = () : React.ReactElement => {
         const posts = await response.json();
 
         setPosts(posts);
+        setPostTitle(""); // reset form fata 
+        setPostTitle({}); //reset formData
     }
     
     const handleTitleInputChange = async (event: any) => {
@@ -34,17 +36,18 @@ const PostCreate = () : React.ReactElement => {
 
         setPostTitle(value);
         setFormData(formData);
+
     }
     
 
     return (
-        <>
-        <h2> Create Post </h2>
-        <form ref={formRef} onSubmit={handleSubmitFormSubmit}>
-            <input onChange={handleTitleInputChange} type="text" placeholder="Create a Post" value={postTitle} />
-            <input type="submit" value="Create"/>
-        </form>
-        </>
+        <div>
+            <h2> Create Post </h2>
+            <form ref={formRef} onSubmit={handleSubmitFormSubmit}>
+                <input onChange={handleTitleInputChange} type="text" placeholder="Create a Post" value={postTitle} />
+                <input type="submit" value="Create"/>
+            </form>
+        </div>
     )
 }
 
