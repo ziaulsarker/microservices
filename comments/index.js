@@ -9,6 +9,9 @@ const HOST = "127.0.0.1";
 
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
+server.use(cors({
+    origin: ["http://localhost:3000/", "http://localhost:3000"], 
+}));
 
 const commentsByPostId = {};
 
