@@ -6,8 +6,10 @@ import PostCreate from './postCreate';
 function App() {
   return (
     <PostProvider>
-      <PostCreate />
-      <PostList />
+      <main className="[ sm:container mx-auto w-11/12 md:w-auto ]">
+        <PostCreate />
+        <PostList />
+      </main>
     </PostProvider>
   );
 }
