@@ -8,8 +8,8 @@ interface Props {
 }
 
 const PostList = (props: Props): React.ReactElement => {
-  const {posts}: UseFetchPostsInterfaces = useContext(PostsContext);
-  const availablePosts: Post[] | any= Object.values({...posts});
+  const { posts }: UseFetchPostsInterfaces = useContext(PostsContext);
+  const availablePosts: Post[] | any = Object.values({...posts});
   return (
     <>
     {availablePosts.map( ({id, title}: Post) => (

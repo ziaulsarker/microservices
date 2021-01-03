@@ -31,9 +31,6 @@ const PostCreate = () : React.ReactElement => {
     const handleTitleInputChange = async (event: any) => {
         const { value } = event.target;
         const formData = {title: value};
-        console.log("val => ", value);
-        console.log("formData => ", formData);
-
         setPostTitle(value);
         setFormData(formData);
 

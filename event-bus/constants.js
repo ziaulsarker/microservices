@@ -1,0 +1,1 @@
+export const POST_CREATE = 'POST_CREATE';
