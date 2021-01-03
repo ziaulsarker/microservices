@@ -2,16 +2,18 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import {randomBytes} from "crypto";
+import axios from "axios";
+import {POST_CREATE} from "./constants.js";
 
 const server = express();
-const port = 3001;
-const host = "127.0.0.1";
+const PORT = 3001;
+const HOST = "127.0.0.1";
 
 server.use(bodyParser.json()) // for parsing application/json
 server.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-
 
 server.use(cors({
-    origin: ["http://localhost:3000/", "http://localhost:3000"],   
+    origin: ["http://localhost:3000","http://127.0.0.1:4000"]  
 }))
 
 const posts = {};
@@ -25,16 +27,28 @@ server.get("/posts", (req, res) => {
     res.json(posts);
 })
 
-server.post("/posts", (req, res) => {
+server.post("/posts", async (req, res, next) => {
     const id = randomBytes(4).toString("hex");
     const {title} = req.body;
-
+    const data = {id, title}
     // set posts data
-    posts[id] = {id, title};
+    posts[id] = data;
 
-    res.send(posts);
+    try{
+        const eventResponse = await axios.post("http://127.0.0.1:4000/events", {
+            type: POST_CREATE,
+            payload: data
+        });
+
+        console.log(eventResponse.data);
+    } catch (err) {
+        console.error("ERROR => ", err.message);
+        next(err);
+    }
+
+    res.status(201).json(posts);
 })
 
-server.listen(port, host, '127.0.0.1', () => {
-    console.log(`server is running on ${host}:${port}`);
+server.listen(PORT, HOST, () => {
+    console.log(`server is running on ${HOST}:${PORT}`);
 })

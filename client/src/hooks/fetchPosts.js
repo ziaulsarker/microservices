@@ -7,6 +7,7 @@ function useFetchPosts() {
         try{
             const postsRes = await fetch(postEndpoint);
             const fetchedPosts = await postsRes.json();
+            console.log("fetchedPosts",fetchedPosts);
             setPosts(fetchedPosts);
         } catch (err) {
             console.error(err)
