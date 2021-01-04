@@ -39,7 +39,7 @@ function CommentCreate ({postId}: Props): React.ReactElement {
     }
        return (
            <div>
-                {comments.map(({commentID, content}) => <li key={commentID}>{content}</li>)}
+                {comments.map(({commentId, content}) => <li key={commentId}>{content}{commentId}</li>)}
                 <form onSubmit={handleCommentCreate}>
                     <label  className="block">{postId}</label>
                     <input type="text" onChange={e => setCommentContent(e.target.value)} value={commentContent} className="border-2 border-blue-500 border-opacity-75 md:border-opacity-50 px-2 py-1"/>

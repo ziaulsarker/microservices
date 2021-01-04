@@ -24,7 +24,7 @@ server.get("/posts", async (req, res) => {
     res.status(200).json(posts);
 });
 
-server.post("/events", async (req, res) => {
+server.post("/events", (req, res) => {
     const event = req.body;
     const {type, payload} = event;
 
@@ -32,21 +32,28 @@ server.post("/events", async (req, res) => {
     
     switch (type) {
         case POST_CREATE : {
-            const {id, title} = payload;
-            if(!posts[payload.id]){
-                posts[payload.id] = payload; 
+            const {id, title, comments = []} = payload;
+            if(!posts[id]){
+                posts[id] = {postId: id, title, comments}; 
             }
 
             return res.status(201).json(posts); 
         }
         case  COMMENT_CREATE : {
             const {postId, content, commentId} = payload;
-            if(posts[postId]?.comments){
-                posts[postId].comments.push({commentId, content});
-            }
 
-            posts[postId].comments = [{commentId, content}];
-            res.status(201).json(posts);
+
+            console.log("postId", postId);
+            console.log("content", content);
+            console.log("commentId", commentId);
+
+            if(!posts[postId]){
+                posts[postId] = {postId, comments:[{commentId, content}]};  
+                return res.status(201).json(posts);
+            }
+     
+            posts[postId].comments.push({commentId, content});
+            return res.status(201).json(posts);
         }   
 
 

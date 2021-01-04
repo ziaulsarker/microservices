@@ -36,9 +36,8 @@ server.post("/events", async (req, res, next) => {
             axios.post("http://127.0.0.1:3003/events", event)
         ]);
 
-        const data = await eventsResponse.filter(p => p.status === "fulfilled");
     
-        console.log("eventsResponse", data.value);
+        console.log("eventsResponse", eventsResponse);
     } catch(err) {
         next(err);
     }
