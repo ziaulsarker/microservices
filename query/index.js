@@ -14,7 +14,7 @@ server.use(bodyParser.urlencoded({ extended: true })) // for parsing application
 server.use(cors({
     origin: [
         "http://127.0.0.1:4000", 
-        "http://127.0.0.1:3000"
+        "http://localhost:3000"
     ],   
 }))
 
@@ -34,10 +34,10 @@ server.post("/events", async (req, res) => {
         case POST_CREATE : {
             const {id, title} = payload;
             if(!posts[payload.id]){
-                posts[payload.id] = payload;
-                res.status(201).json(posts);   
+                posts[payload.id] = payload; 
             }
-            return res.status(200).json(posts); 
+
+            return res.status(201).json(posts); 
         }
         case  COMMENT_CREATE : {
             const {postId, content, commentId} = payload;
