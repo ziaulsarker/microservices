@@ -28,9 +28,21 @@ server.get('/', (req, res) => {
 
 server.post("/events", async (req, res, next) => {
     const event = req.body;
-    axios.post("http://127.0.0.1:3003", event)
 
-    res.status(200).send("OK");
+    try {
+        const eventsResponse = await Promise.allSettled([
+            axios.post("http://127.0.0.1:3001/events", event),
+            axios.post("http://127.0.0.1:3002/events", event),
+            axios.post("http://127.0.0.1:3003/events", event)
+        ]);
+
+    
+        console.log("eventsResponse", eventsResponse);
+    } catch(err) {
+        next(err);
+    }
+
+    res.status(200).send(event);
 })
 
 server.listen(PORT, HOST, () => {
