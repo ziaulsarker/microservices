@@ -29,16 +29,20 @@ server.get('/', (req, res) => {
 server.post("/events", async (req, res, next) => {
     const event = req.body;
 
+
     try {
-        const eventsResponse = await Promise.allSettled([
+        // const postResponse = await axios.post("http://127.0.0.1:3001/events", event);
+        // const postResponseComments = await axios.post("http://127.0.0.1:3002/events", event);
+        // const postResponseQuery = await axios.post("http://127.0.0.1:3003/events", event);
+        const response = await axios.all([
             axios.post("http://127.0.0.1:3001/events", event),
             axios.post("http://127.0.0.1:3002/events", event),
             axios.post("http://127.0.0.1:3003/events", event)
-        ]);
+        ])
 
-    
-        console.log("eventsResponse", eventsResponse);
+        console.log("response => ", response)
     } catch(err) {
+        console.error("EVENTS BUS  ERR", err);
         next(err);
     }
 
@@ -46,5 +50,5 @@ server.post("/events", async (req, res, next) => {
 })
 
 server.listen(PORT, HOST, () => {
-    console.log(`server is running on ${HOST}:${PORT}`);
+    console.log(`EVENT BROKER server is running on ${HOST}:${PORT}`);
 })

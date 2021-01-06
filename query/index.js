@@ -31,21 +31,16 @@ server.post("/events", (req, res) => {
     console.log("event", event);
     
     switch (type) {
-        case POST_CREATE : {
+        case POST_CREATE :
             const {id, title, comments = []} = payload;
             if(!posts[id]){
                 posts[id] = {postId: id, title, comments}; 
             }
 
             return res.status(201).json(posts); 
-        }
-        case  COMMENT_CREATE : {
+        
+        case  COMMENT_CREATE : 
             const {postId, content, commentId} = payload;
-
-
-            console.log("postId", postId);
-            console.log("content", content);
-            console.log("commentId", commentId);
 
             if(!posts[postId]){
                 posts[postId] = {postId, comments:[{commentId, content}]};  
@@ -54,14 +49,12 @@ server.post("/events", (req, res) => {
      
             posts[postId].comments.push({commentId, content});
             return res.status(201).json(posts);
-        }   
-
-
+         
         default : 
             return res.status(200).send(posts);    
     }
 })
 
 server.listen(PORT, HOST, () => {
-    console.log(`server is running on ${HOST}:${PORT}`);
+    console.log(`QUERY server is running on ${HOST}:${PORT}`);
 })

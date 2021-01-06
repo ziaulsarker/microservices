@@ -27,12 +27,14 @@ server.get("/posts", (req, res) => {
     res.json(posts);
 })
 
+
 server.post("/posts", async (req, res, next) => {
     const id = randomBytes(4).toString("hex");
     const {title} = req.body;
     const data = {id, title}
     // set posts data
     posts[id] = data;
+    console.log("post data => ", req.body);
 
     try{
         const eventResponse = await axios.post("http://127.0.0.1:4000/events", {
@@ -46,9 +48,19 @@ server.post("/posts", async (req, res, next) => {
         next(err);
     }
 
+    console.log('aaaa', req.body);
     res.status(201).json(posts);
 })
 
+server.post("/events", async (req, res, next) => {
+    const event = await req.body;
+    const {type} = event;
+
+    if(type === POST_CREATE) {
+        res.status(201).json(event);
+    }
+})
+
 server.listen(PORT, HOST, () => {
-    console.log(`server is running on ${HOST}:${PORT}`);
+    console.log(`POST server is running on ${HOST}:${PORT}`);
 })

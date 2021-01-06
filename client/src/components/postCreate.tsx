@@ -20,10 +20,15 @@ const PostCreate = () : React.ReactElement => {
             },
             body: JSON.stringify(formData),
         }
-        const response = await fetch(postEndpoint, postOptions);
-        const posts = await response.json();
 
-        setPosts(posts);
+        try {
+            const response = await fetch(postEndpoint, postOptions);
+            const posts = await response.json(); 
+            setPosts(posts);
+        } catch (err) {
+            console.error("error", err);
+        }
+
         setPostTitle(""); // reset form fata 
         setFormData({}); //reset formData
     }
