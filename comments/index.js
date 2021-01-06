@@ -42,13 +42,17 @@ server.post("/posts/:id/comments", async (req, res, next) => {
             payload: {postId, content, commentId}
         }
         const response = await axios.post("http://localhost:4000/events", eventData);
-        console.log("response", response);
     }catch(err){
         next(err);
     }
 
 
     res.json(commentsByPost);
+})
+
+server.post("/events", async (req, res, next) => {
+    const eventData = req.body;
+    res.status(201).json(eventData);
 })
 
 server.listen(PORT, HOST, () => {

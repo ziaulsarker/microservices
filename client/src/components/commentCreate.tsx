@@ -33,7 +33,6 @@ function CommentCreate ({postId}: Props): React.ReactElement {
             body: JSON.stringify({content: commentContent})
         })
         const comments = await response.json();
-        console.log(comments)
         setCommentContent("");
         setComments(comments);
     }
