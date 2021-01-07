@@ -7,12 +7,14 @@ const PostCreate = () : React.ReactElement => {
     const [postTitle, setPostTitle]: any = useState("");
 
     const formRef = useRef(document.createElement('form'));
-    const {setPosts} : UseFetchPostsInterfaces | any = useContext(PostsContext)
+    
+    const {setQuery} : UseFetchPostsInterfaces | any = useContext(PostsContext)
 
 
     const handleSubmitFormSubmit = async (event: any) => {
         event.preventDefault();
         const postEndpoint = 'http://127.0.0.1:3001/posts'
+        const queryEndpoint = "http://127.0.0.1:3003/posts";
         const postOptions = {
             method: 'POST',
             headers: {
@@ -22,9 +24,10 @@ const PostCreate = () : React.ReactElement => {
         }
 
         try {
-            const response = await fetch(postEndpoint, postOptions);
-            const posts = await response.json(); 
-            setPosts(posts);
+            await fetch(postEndpoint, postOptions);
+            const queryResult = await (await fetch(queryEndpoint)).json();
+            setQuery(queryResult);
+            
         } catch (err) {
             console.error("error", err);
         }

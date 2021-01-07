@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
 import bodyParser from 'body-parser';
-import {POST_CREATE} from "./constants.js";
+import {POST_CREATE, COMMENT_CREATE} from "./constants.js";
 
 const server = express();
 const HOST = "127.0.0.1";
@@ -31,9 +31,6 @@ server.post("/events", async (req, res, next) => {
 
 
     try {
-        // const postResponse = await axios.post("http://127.0.0.1:3001/events", event);
-        // const postResponseComments = await axios.post("http://127.0.0.1:3002/events", event);
-        // const postResponseQuery = await axios.post("http://127.0.0.1:3003/events", event);
         const response = await axios.all([
             axios.post("http://127.0.0.1:3001/events", event),
             axios.post("http://127.0.0.1:3002/events", event),

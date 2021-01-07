@@ -1,1 +1,2 @@
 export const POST_CREATE = 'POST_CREATE';
+export const COMMENT_CREATE = 'COMMENT_CREATE';

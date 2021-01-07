@@ -1,30 +1,27 @@
 
-import React, { useState, SyntheticEvent, useMemo, useEffect } from "react";
-
+import React, { useState, SyntheticEvent, useMemo, useContext } from "react";
+import {PostsContext} from "../contexts/posts-context";
+import {UseFetchPostsInterfaces} from "../types/post-type";
+import { Comment } from "../types/post-type";
 interface Props {
-    postId: string;
+    data: {
+        postId: string;
+        title: string;
+        comments: Comment[];
+    }
 }
 
-function CommentCreate ({postId}: Props): React.ReactElement {
+function CommentCreate ({data}: Props): React.ReactElement {
     const [commentContent, setCommentContent] = useState("");
-    const [comments, setComments] = useState([]);
+    const {setQuery} : UseFetchPostsInterfaces | any = useContext(PostsContext)
 
-    useEffect(() => {
-        const getComments = async (id:string) => {
-            try {
-                const response = await fetch(`http://127.0.0.1:3002/posts/${id}/comments`);
-                const comments = await response.json();
-                setComments(comments);
-            } catch (err) {
-                return comments;
-            }
-        };
-        getComments(postId);
-    }, []);
+    const {postId, comments} = data;
 
     const memoizedJSX = useMemo(() => {
     const handleCommentCreate = async (event: SyntheticEvent) => {
         event.preventDefault();
+        const commentEndpoint = 'http://127.0.0.1:3002/posts'
+        const queryEndpoint = "http://127.0.0.1:3003/posts";
         const options = {
             method: "POST",
             headers: {
@@ -33,17 +30,13 @@ function CommentCreate ({postId}: Props): React.ReactElement {
             body: JSON.stringify({content: commentContent})
         }
 
-        fetch(`http://127.0.0.1:3002/posts/${postId}/comments`, options)
-            .then((response => response.json()))
-            .then(data => setComments(data));
-
-        // try{
-        //     const response = await fetch(`http://127.0.0.1:3002/posts/${postId}/comments`, options)
-        //     const comments = await response.json();
-        //     setComments(comments);
-        // } catch (err) {
-        //     console.error(err);
-        // }
+        try{
+            await fetch(`${commentEndpoint}/${postId}/comments`, options);
+            const queryResult = await (await fetch(queryEndpoint)).json();
+            setQuery(queryResult);
+        } catch (err) {
+            console.error(err);
+        }
 
         setCommentContent("");
 
@@ -58,7 +51,7 @@ function CommentCreate ({postId}: Props): React.ReactElement {
                 </form>
             </div>
        );
-    }, [postId, comments, commentContent]);
+    }, [postId, comments, commentContent, setQuery]);
 
     return memoizedJSX;
 }
