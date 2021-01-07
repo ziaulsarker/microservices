@@ -8,14 +8,14 @@ interface Props {
 }
 
 const PostList = (props: Props): React.ReactElement => {
-  const { posts }: UseFetchPostsInterfaces = useContext(PostsContext);
-  const availablePosts: Post[] | any = Object.values({...posts});
+  const { query } : UseFetchPostsInterfaces = useContext(PostsContext);
+  const availablePosts: Post[] | any = Object.values({...query});
   return (
     <>
-    {availablePosts.map( ({id, title}: Post) => (
-      <div key={id}>
+    {availablePosts.map( ({postId, title, comments = []}: any ) => (
+      <div key={postId}>
         <h2> {title} </h2> 
-        <CommentCreate postId={id}/> 
+        <CommentCreate data={{postId, title, comments}}/> 
       </div>
     ))}
     </>

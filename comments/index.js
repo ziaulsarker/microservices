@@ -36,23 +36,33 @@ server.post("/posts/:id/comments", async (req, res, next) => {
     commentsByPost.push(comment);
     commentsByPostId[postId] = commentsByPost; 
 
+    console.log("comment data => ", req.body);
+    console.log("{postId, content, commentId} => ", {postId, content, commentId});
+
     try{
         const eventData = {
             type: COMMENT_CREATE,
             payload: {postId, content, commentId}
         }
-        const response = await axios.post("http://localhost:4000/events", eventData);
+        const response = await axios.post("http://127.0.0.1:4000/events", eventData);
     }catch(err){
+        console.error("ERROR => ", err.message);
         next(err);
     }
 
 
-    res.json(commentsByPost);
+    res.status(201).json(commentsByPost);
 })
 
 server.post("/events", async (req, res, next) => {
-    const eventData = req.body;
-    res.status(201).json(eventData);
+    const event = await req.body;
+    const {type} = event;
+
+    if(type === COMMENT_CREATE) {
+        return res.status(201).json(event);
+    }
+
+    res.status(201).json({});
 })
 
 server.listen(PORT, HOST, () => {
