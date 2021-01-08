@@ -66,5 +66,5 @@ server.post("/events", async (req, res, next) => {
 })
 
 server.listen(PORT, HOST, () => {
-    console.log(`server is running on ${HOST}:${PORT}`)
+    console.log(`COMMENTS server is running on ${HOST}:${PORT}`)
 })
