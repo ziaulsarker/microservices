@@ -36,11 +36,12 @@ server.post("/posts", async (req, res, next) => {
     posts[id] = data;
 
     try{
+        console.log("trying event")
         const eventResponse = await axios.post("http://127.0.0.1:4000/events", {
             type: POST_CREATE,
             payload: data
         });
-
+        console.log("eventResponse -> ", eventResponse)
     } catch (err) {
         console.error("ERROR => ", err.message);
         next(err);

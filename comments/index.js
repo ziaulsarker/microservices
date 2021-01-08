@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import {randomBytes} from "crypto";
-import {COMMENT_CREATE} from "./constants.js";
+import {COMMENT_CREATE, COMMENT_MODERATED, COMMENT_UPDATED} from "./constants.js";
 import axios from "axios";
 
 const server = express();
@@ -32,7 +32,7 @@ server.post("/posts/:id/comments", async (req, res, next) => {
     const {content} = req.body;
     const commentsByPost = commentsByPostId[postId] ?? [];
     const commentId = randomBytes(4).toString("hex"); 
-    const comment = {content, commentId};    
+    const comment = {content, commentId, status: "pending"};    
     commentsByPost.push(comment);
     commentsByPostId[postId] = commentsByPost; 
 
@@ -42,7 +42,7 @@ server.post("/posts/:id/comments", async (req, res, next) => {
     try{
         const eventData = {
             type: COMMENT_CREATE,
-            payload: {postId, content, commentId}
+            payload: {postId, content, commentId, status: "pending"}
         }
         const response = await axios.post("http://127.0.0.1:4000/events", eventData);
     }catch(err){
@@ -56,10 +56,25 @@ server.post("/posts/:id/comments", async (req, res, next) => {
 
 server.post("/events", async (req, res, next) => {
     const event = await req.body;
-    const {type} = event;
+    const {type, payload} = event;
 
     if(type === COMMENT_CREATE) {
         return res.status(201).json(event);
+    }
+
+    if(type === COMMENT_MODERATED) {
+        const data = {
+            type: COMMENT_UPDATED,
+            payload
+        }
+
+        try {
+            const commmentUpdatedResponse = await axios.post("http://127.0.0.1:4000/events", data);
+            console.log("commmentUpdatedResponse", commmentUpdatedResponse.data);
+        }catch (err) {
+            next(err);
+        }
+
     }
 
     res.status(201).json({});

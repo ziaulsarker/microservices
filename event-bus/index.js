@@ -31,10 +31,13 @@ server.post("/events", async (req, res, next) => {
 
 
     try {
+
+        console.log("post => ", "event => ", event)
         const response = await axios.all([
             axios.post("http://127.0.0.1:3001/events", event),
             axios.post("http://127.0.0.1:3002/events", event),
-            axios.post("http://127.0.0.1:3003/events", event)
+            axios.post("http://127.0.0.1:3003/events", event),
+            axios.post("http://127.0.0.1:3004/events", event),
         ])
 
         console.log("response => ", response)
