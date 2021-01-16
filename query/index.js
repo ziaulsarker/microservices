@@ -20,6 +20,25 @@ server.use(cors({
 
 const posts = {}
 
+const handleEvent = (type, payload) => {
+    const {postId, content, commentId, status} = payload;
+    switch (type) {
+        case POST_CREATE :
+            const {id, title, comments = {}} = payload;
+            if(!posts[id]){
+                posts[id] = {postId: id, title, comments}; 
+            }
+        case  COMMENT_CREATE : 
+            if(!posts[postId]){
+                posts[postId] = {postId, comments:{[commentId]: {commentId, content, status}}};  
+            }
+            posts[postId].comments[commentId] = {commentId, content, status};
+        case COMMENT_UPDATED : 
+            posts[postId].comments[commentId].status = status;
+        default : return posts  
+    }
+}
+
 server.get("/posts", async (req, res) => {
     res.status(200).json(posts);
 });
@@ -27,37 +46,21 @@ server.get("/posts", async (req, res) => {
 server.post("/events", (req, res) => {
     const event = req.body;
     const {type, payload} = event;
-    const {postId, content, commentId, status} = payload;
 
-    console.log("event", event);
+    handleEvent(type, payload);
+    return res.status(200).send(posts); 
     
-    switch (type) {
-        case POST_CREATE :
-            const {id, title, comments = {}} = payload;
-            if(!posts[id]){
-                posts[id] = {postId: id, title, comments}; 
-            }
-
-            return res.status(201).json(posts); 
-        
-        case  COMMENT_CREATE : 
-
-            if(!posts[postId]){
-                posts[postId] = {postId, comments:{[commentId]: {commentId, content, status}}};  
-                return res.status(201).json(posts);
-            }
-     
-            posts[postId].comments[commentId] = {commentId, content, status};
-            return res.status(201).json(posts);
-         
-        case COMMENT_UPDATED : 
-            posts[postId].comments[commentId].status = status;
-            return res.status(200).send(posts); 
-        default : 
-            return res.status(200).send(posts);    
-    }
 })
 
-server.listen(PORT, HOST, () => {
+server.listen(PORT, HOST, async () => {
+    try {
+        const pastedEvents =  await axios.get("http://127.0.0.1:4000/events")
+        for( const {type, payload} of pastedEvents.data ){
+            handleEvent(type, payload);
+        }
+    }catch (err) {
+        console.error(err);
+    }
+
     console.log(`QUERY server is running on ${HOST}:${PORT}`);
 })

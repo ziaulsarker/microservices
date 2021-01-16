@@ -12,8 +12,14 @@ const EVENT_ORIGINS = [
     "http://127.0.0.1:3001", 
     "https://127.0.0.1:3001",
     "http://127.0.0.1:3002", 
-    "https://127.0.0.1:3002"
+    "https://127.0.0.1:3002",
+    "http://127.0.0.1:3003", 
+    "https://127.0.0.1:3003",
+    "http://127.0.0.1:3004", 
+    "https://127.0.0.1:3004"
 ]
+
+const events = []
 
 server.use(cors({
     origin: EVENT_ORIGINS
@@ -26,10 +32,15 @@ server.get('/', (req, res) => {
     res.json({"yo": "pussy bitch"})
 })
 
+server.get("/events", async (req, res, next) => {
+    res.json(events);
+})
+
 server.post("/events", async (req, res, next) => {
     const event = req.body;
 
-
+    events.push(event);
+    
     try {
 
         console.log("post => ", "event => ", event)
